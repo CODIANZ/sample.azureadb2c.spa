@@ -11,9 +11,13 @@
     "vue": "^2.6.11"
   },
   "devDependencies": {
+    "@azure/msal-browser": "^2.14.1",
+    "@types/axios": "^0.14.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "@vue/composition-api": "^1.0.0-rc.8",
+    "axios": "^0.21.1",
     "typescript": "~4.1.5",
     "vue-template-compiler": "^2.6.11"
   }
