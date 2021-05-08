@@ -1,19 +1,14 @@
-# sample.azureadb2c.spa
+# Azure Active Directory B2C を使った Vue.js の実装サンプル
 
-## Project setup
-```
-npm install
-```
+## 概要
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+下記 Qiita の記事用のサンプルコードです。
 
-### Compiles and minifies for production
-```
-npm run build
-```
+https://qiita.com/terukazu/items/7bd8cc27827c35d6c0b4
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://qiita.com/terukazu/items/698abe21c699ac36112f
+
+## 注意点
+
+2021/05/09 現在、 Azure AD B2C のテナントは存在して動作していますが、場合によってはインスタンスを落とす可能性があります。
+その場合、 Qiita の記事を参考に Azure AD B2C のテナントやアプリなどを作成してください。
