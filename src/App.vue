@@ -1,13 +1,17 @@
 <template>
   <div id="app">
     <div v-if="!m.accountId">
-      <button @click="onSignIn()">
-        サインイン
+      <button @click="onSignInPopup()">
+        サインイン（ポップアップ）
+      </button>
+      <button @click="onSignInRedirect()">
+        サインイン（リダイレクト）
       </button>
     </div>
     <div v-else>
       こんにちは {{ m.accountName }} さん
-      <button @click="onSignOut()">サインアウト</button>
+      <button @click="onSignOutPopup()">サインアウト（ポップアップ）</button>
+      <button @click="onSignOutRedirect()">サインアウト（リダイレクト）</button>
     </div>
     <button @click="onCallApi()">API呼び出し</button>
     <div>
@@ -99,7 +103,16 @@ export default defineComponent({
 
     const msalObj = new msal.PublicClientApplication(msalConfig);
 
-    const signIn = () => {
+    msalObj.handleRedirectPromise()
+    .then((resp) => {
+      if(resp){
+        if (((resp.idTokenClaims as any).tfp  as string).toUpperCase() === settings.flowName.toUpperCase()) {
+          setAccount(resp.account ?? undefined);
+        }
+      }
+    });
+
+    const signInPopup = () => {
       msalObj
         .loginPopup(authReq)
         .then((x) => {
@@ -111,13 +124,30 @@ export default defineComponent({
         });
     };
 
+    const signInRedirect = () => {
+      msalObj
+        .loginRedirect(authReq)
+        .then((x) => {
+          console.log(x);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+
     const setAccount = (account?: msal.AccountInfo) => {
       m.accountId = account?.homeAccountId;
       m.accountName = account?.name;
     };
 
-    const signOut = () => {
-      msalObj.logoutPopup(logoffReq);
+    const signOutPopup = () => {
+      msalObj.logoutPopup(logoffReq)
+      setAccount();
+    };
+
+    const signOutRedirect = () => {
+      msalObj.logoutRedirect(logoffReq);
       setAccount();
     };
 
@@ -151,7 +181,7 @@ export default defineComponent({
         ) {
           setAccount(accounts[0]);
         } else {
-          signOut();
+          signOutRedirect();
         }
       }
     };
@@ -211,11 +241,17 @@ export default defineComponent({
 
     return {
       m,
-      onSignIn() {
-        signIn();
+      onSignInPopup() {
+        signInPopup();
       },
-      onSignOut() {
-        signOut();
+      onSignInRedirect() {
+        signInRedirect();
+      },
+      onSignOutPopup() {
+        signOutPopup();
+      },
+      onSignOutRedirect() {
+        signOutRedirect();
       },
       onCallApi() {
         if (!m.accountId) {
